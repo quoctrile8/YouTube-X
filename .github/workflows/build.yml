@@ -10,43 +10,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
+      # Check out the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
       # Set up Theos
       - name: Set up Theos
         run: |
-          # Cài đặt các công cụ cần thiết
           sudo apt update
           sudo apt install -y git wget curl unzip perl clang make dpkg
-          
-          # Cloning Theos repository
           git clone https://github.com/theos/theos.git $HOME/theos
-          
-          # Tải và cài đặt dm.pl
           wget -O $HOME/theos/bin/dm.pl https://raw.githubusercontent.com/theos/theos/master/bin/dm.pl
           chmod +x $HOME/theos/bin/dm.pl
-          
-          # Tải SDK từ kho của cộng đồng
-          wget -O $HOME/theos/sdks/main.zip https://github.com/k1llua/ios-theos-sdks/archive/refs/heads/main.zip
-          unzip -q $HOME/theos/sdks/main.zip -d $HOME/theos/sdks
-          
-          # Di chuyển SDK và dọn dẹp
-          mv $HOME/theos/sdks/ios-theos-sdks-main/iPhoneOS14.5.sdk $HOME/theos/sdks/
-          rm -rf $HOME/theos/sdks/ios-theos-sdks-main
-          rm $HOME/theos/sdks/main.zip
-          
-          # Thiết lập môi trường Theos
           echo "export THEOS=$HOME/theos" >> $GITHUB_ENV
 
+      # Download iOS SDK
+      - name: Download iOS SDK
+        run: |
+          wget https://github.com/xybp888/iOS-SDKs/archive/refs/heads/f5c585b443f1e0b5c6ced2732aac183e71021c86.zip -O /tmp/ios-sdk.zip
+          unzip /tmp/ios-sdk.zip -d /tmp
+          mv /tmp/iOS-SDKs-f5c585b443f1e0b5c6ced2732aac183e71021c86/iPhoneOS16.4.sdk /home/runner/ios-sdk
+
       # Build the package
-      - name: Build .deb package
+      - name: Build .deb
         run: |
           export THEOS=$HOME/theos
+          export SDK_PATH=/home/runner/ios-sdk/iPhoneOS16.4.sdk
+          echo "SDK_PATH=$SDK_PATH" >> $GITHUB_ENV
           make package
 
-      # Upload .deb file as artifact
+      # Upload artifact (the .deb file)
       - name: Upload .deb file
         uses: actions/upload-artifact@v3
         with:
