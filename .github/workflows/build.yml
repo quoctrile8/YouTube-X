@@ -28,13 +28,13 @@ jobs:
           wget -O $HOME/theos/bin/dm.pl https://raw.githubusercontent.com/theos/theos/master/bin/dm.pl
           chmod +x $HOME/theos/bin/dm.pl
           
-          # Tải SDK từ GitHub
-          wget -O $HOME/theos/sdks/main.zip https://github.com/theos/sdks/archive/refs/heads/main.zip
+          # Tải SDK từ kho của cộng đồng
+          wget -O $HOME/theos/sdks/main.zip https://github.com/k1llua/ios-theos-sdks/archive/refs/heads/main.zip
           unzip -q $HOME/theos/sdks/main.zip -d $HOME/theos/sdks
           
           # Di chuyển SDK và dọn dẹp
-          mv $HOME/theos/sdks/sdks-main/iPhoneOS14.5.sdk $HOME/theos/sdks/
-          rm -rf $HOME/theos/sdks/sdks-main
+          mv $HOME/theos/sdks/ios-theos-sdks-main/iPhoneOS14.5.sdk $HOME/theos/sdks/
+          rm -rf $HOME/theos/sdks/ios-theos-sdks-main
           rm $HOME/theos/sdks/main.zip
           
           # Thiết lập môi trường Theos
