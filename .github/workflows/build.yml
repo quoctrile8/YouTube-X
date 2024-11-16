@@ -16,17 +16,18 @@ jobs:
 
       # Set up Theos
       - name: Set up Theos
-        run: |
-          sudo apt update
-          sudo apt install -y git wget curl unzip perl clang make dpkg
-          git clone https://github.com/theos/theos.git $HOME/theos
-          wget -O $HOME/theos/bin/dm.pl https://raw.githubusercontent.com/theos/theos/master/bin/dm.pl
-          chmod +x $HOME/theos/bin/dm.pl
-          wget -O $HOME/theos/sdks/iPhoneOS14.5.sdk.zip https://github.com/theos/sdks/raw/master/iPhoneOS14.5.sdk.zip
-          unzip -q $HOME/theos/sdks/iPhoneOS14.5.sdk.zip -d $HOME/theos/sdks
-          rm $HOME/theos/sdks/iPhoneOS14.5.sdk.zip
-          echo "export THEOS=$HOME/theos" >> $GITHUB_ENV
-
+      run: |
+    sudo apt update
+    sudo apt install -y git wget curl unzip perl clang make dpkg
+    git clone https://github.com/theos/theos.git $HOME/theos
+    wget -O $HOME/theos/bin/dm.pl https://raw.githubusercontent.com/theos/theos/master/bin/dm.pl
+    chmod +x $HOME/theos/bin/dm.pl
+    wget -O $HOME/theos/sdks/main.zip https://github.com/theos/sdks/archive/refs/heads/main.zip
+    unzip -q $HOME/theos/sdks/main.zip -d $HOME/theos/sdks
+    mv $HOME/theos/sdks/sdks-main/iPhoneOS14.5.sdk $HOME/theos/sdks/
+    rm -rf $HOME/theos/sdks/sdks-main
+    rm $HOME/theos/sdks/main.zip
+    echo "export THEOS=$HOME/theos" >> $GITHUB_ENV
       # Build the package
       - name: Build .deb
         run: |
