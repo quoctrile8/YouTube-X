@@ -32,11 +32,15 @@ jobs:
       # Download iOS SDK
       - name: Download iOS SDK
         run: |
-          git clone --quiet -n --depth=1 --filter=tree:0 https://github.com/theos/sdks/
+          git clone --quiet --depth=1 https://github.com/theos/sdks.git
           cd sdks
+          # Check available SDKs
+          ls
           git sparse-checkout set --no-cone iPhoneOS16.5.sdk
           git checkout
-          mv *.sdk $THEOS/sdks
+          # Check if the SDK exists
+          ls
+          mv iPhoneOS16.5.sdk $THEOS/sdks/
         env:
           THEOS: ${{ github.workspace }}/theos
 
