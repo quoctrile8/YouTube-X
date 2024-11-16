@@ -24,7 +24,7 @@ jobs:
           chmod +x $HOME/theos/bin/dm.pl
           echo "export THEOS=$HOME/theos" >> $GITHUB_ENV
 
-      # Create the 'sdks' directory (if it doesn't exist)
+      # Create 'sdks' directory if it doesn't exist
       - name: Create SDKs directory
         run: |
           mkdir -p $HOME/theos/sdks
