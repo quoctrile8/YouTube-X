@@ -1,0 +1,36 @@
+name: Build .deb Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Theos
+      - name: Set up Theos
+        run: |
+          sudo apt update
+          sudo apt install -y git wget curl unzip perl clang make dpkg
+          git clone https://github.com/theos/theos.git $HOME/theos
+          echo "export THEOS=$HOME/theos" >> $GITHUB_ENV
+
+      # Build the package
+      - name: Build .deb
+        run: |
+          export THEOS=$HOME/theos
+          make package
+        
+      # Upload artifact (the .deb file)
+      - name: Upload .deb file
+        uses: actions/upload-artifact@v3
+        with:
+          name: YouTube-X
+          path: ./packages/*.deb
