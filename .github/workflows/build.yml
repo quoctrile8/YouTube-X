@@ -20,6 +20,8 @@ jobs:
           sudo apt update
           sudo apt install -y git wget curl unzip perl clang make dpkg
           git clone https://github.com/theos/theos.git $HOME/theos
+          wget -O $HOME/theos/bin/dm.pl https://raw.githubusercontent.com/theos/theos/master/bin/dm.pl
+          chmod +x $HOME/theos/bin/dm.pl
           echo "export THEOS=$HOME/theos" >> $GITHUB_ENV
 
       # Build the package
@@ -27,7 +29,7 @@ jobs:
         run: |
           export THEOS=$HOME/theos
           make package
-        
+
       # Upload artifact (the .deb file)
       - name: Upload .deb file
         uses: actions/upload-artifact@v3
