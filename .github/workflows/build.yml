@@ -27,9 +27,9 @@ jobs:
       # Download iOS SDK
       - name: Download iOS SDK
         run: |
-          wget https://github.com/xybp888/iOS-SDKs/archive/refs/heads/f5c585b443f1e0b5c6ced2732aac183e71021c86.zip -O /tmp/ios-sdk.zip
+          wget https://github.com/xybp888/iOS-SDKs/releases/download/iOS14.0-iOS16.4SDKs/iPhoneOS14.0-iOS16.4SDKs.zip -O /tmp/ios-sdk.zip
           unzip /tmp/ios-sdk.zip -d /tmp
-          mv /tmp/iOS-SDKs-f5c585b443f1e0b5c6ced2732aac183e71021c86/iPhoneOS16.4.sdk /home/runner/ios-sdk
+          mv /tmp/iOS14.0-iOS16.4SDKs/iPhoneOS16.4.sdk /home/runner/ios-sdk
 
       # Build the package
       - name: Build .deb
