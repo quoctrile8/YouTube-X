@@ -25,14 +25,27 @@ jobs:
           echo "export THEOS=$HOME/theos" >> $GITHUB_ENV
 
       # Download iOS SDK
-      - name: Download iOS SDK
-        run: |
-          wget https://github.com/xybp888/iOS-SDKs/releases/download/iOS14.0-iOS16.4SDKs/iPhoneOS14.0-iOS16.4SDKs.zip -O /tmp/ios-sdk.zip
-          unzip /tmp/ios-sdk.zip -d /tmp
-          # Kiểm tra xem SDK đã được giải nén đúng chưa và di chuyển SDK vào đúng thư mục
-          ls /tmp/iOS14.0-iOS16.4SDKs
-          mv /tmp/iOS14.0-iOS16.4SDKs/iPhoneOS16.4.sdk /home/runner/ios-sdk
+       - name: SDK Caching
+        id: SDK
+        uses: actions/cache@v4.0.1
+        env:
+          cache-name: iOS-16.5-SDK
+        with:
+          path: theos/sdks/
+          key: ${{ env.cache-name }}
+          restore-keys: ${{ env.cache-name }}
 
+      - name: Download iOS SDK
+        if: steps.SDK.outputs.cache-hit != 'true'
+        run: |
+          git clone --quiet -n --depth=1 --filter=tree:0 https://github.com/theos/sdks/
+          cd sdks
+          git sparse-checkout set --no-cone iPhoneOS16.5.sdk
+          git checkout
+          mv *.sdk $THEOS/sdks
+        env:
+          THEOS: ${{ github.workspace }}/theos
+     
       # Build the package
       - name: Build .deb
         run: |
